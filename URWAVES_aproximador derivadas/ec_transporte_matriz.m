@@ -2,13 +2,16 @@ clc
 close all
 clearvars
 
+% Ecuación de transporte: Ut + C*Ux = 0
+
 elem = 2;
 dt = 0.005;
 dx = 0.005;
 c = -0.5;
 tf = 0.3; % Tiempo final
-X = 0:dx:elem;
-Y = (0.4).*exp(-300.*(X-(0.5)).^2);
+X = 0:dx:elem; % Vector del cambio en el espacio
+Y = (0.4).*exp(-300.*(X-(0.5)).^2); % Función a analizaar
+Yt = 0:dt:tf; % Vector del cambio en el tiempo
 
 % Yi = f(xi)
 n = size(X);
@@ -33,8 +36,10 @@ for i = 2:tf/dt
     U(i,:) = U(i-1,:) - c.*dt.*(A*U(i-1,:)')';
 end
 
-Yt = 0:dt:tf;
 mesh(X, Yt, U)
+
+
+
 
 
 
