@@ -6,13 +6,13 @@ close all
 
 % Variables
 
-dx = 0.02; %intervalo de espacio
-dt = 0.02; % intervalo de tiempo
+dx = 0.01; %intervalo de espacio
+dt = 0.01; % intervalo de tiempo
 a = 1; % pos inicial de los valores
 eps = 0.1; %"ancho" de la onda
 
-J = 200; % # de puntos en el espacio
-N = 160; % # de puntos en el tiempo
+J = round(10/dx); % # de puntos en el espacio
+N = round(8/dt); % # de puntos en el tiempo
 est = 10; % # de estados de tiempo a imprimir
 
 g = 1; %aceleración gravitacional
@@ -23,10 +23,10 @@ p = (g*h)/4;
 q = 1/4;
 
 % Sistema de la forma As^(n+1) = Bs^n
-
-M1 = diag(4*m*ones(1,J-2)) + diag(m*ones(1,J-3),1) + diag(m*ones(1,J-3),-1);
-M2 = diag(p*ones(1,J-3),1) + diag(-p*ones(1,J-3),-1);
-M3 = diag(q*ones(1,J-3),1) + diag(-q*ones(1,J-3),-1);
+% diag(q*ones(1,J-3),1) + diag(-q*ones(1,J-3),-1);
+M1 = spdiags([[m*ones(J-3,1);0], 4*m*ones(J-2,1), [m*ones(J-3,1);0]], -1:1, J-2,J-2);
+M2 = spdiags([[-p*ones(J-3,1);0],[p*ones(J-3,1);0]], [-1,1], J-2,J-2);
+M3 = spdiags([[-q*ones(J-3,1);0],[q*ones(J-3,1);0]], [-1,1], J-2,J-2);
 
 A = [M1, M2; M3, M1];
 B = [M1, -M2; -M3, M1];
@@ -65,4 +65,4 @@ for i = 2:N
     end
 end
 
-plot(X(:,10), [zeros(1,est);aux;zeros(1,est)])
+plot(X, [zeros(1,est);aux])
